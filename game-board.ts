@@ -10,6 +10,7 @@ export class GameBoard {
     playerTwo = new Player('Player two', 2);
     currentPlayer: Player;
     winner: Player;
+    steps: number;
     constructor(public tableElement: JQuery) {
         this.startGame();
     }
@@ -48,6 +49,12 @@ export class GameBoard {
         this.playerTwo = data.playerTwo;
         this.currentPlayer =
             (data.current === 'player-one') ? this.playerOne : this.playerTwo;
+        this.steps = data.steps;
+        $(".player-one-name").text(this.playerOne.name);
+        $(".player-two-name").text(this.playerTwo.name);
+        $(".player-one-won-rounds").text(this.playerOne.gamesWon);
+        $(".player-two-won-rounds").text(this.playerTwo.gamesWon);
+        $(".step-number").text(this.steps);
         return true;
     }
     saveState() {
@@ -57,6 +64,7 @@ export class GameBoard {
             current: (this.currentPlayer === this.playerOne) ? 'player-one' : 'player-two',
             x: this.x,
             y: this.y,
+            steps: this.steps,
             tileStates: this.board.map(row => row.map(tile => tile.state))
         }));
     }
@@ -65,6 +73,12 @@ export class GameBoard {
             this.initializeBoard(this.tableElement, this.board = []);
             this.currentPlayer =
                 this.winner === this.playerOne ? this.playerTwo : this.playerOne;
+            this.steps = 0;
+            $(".player-one-name").text(this.playerOne.name);
+            $(".player-two-name").text(this.playerTwo.name);
+            $(".player-one-won-rounds").text(this.playerOne.gamesWon);
+            $(".player-two-won-rounds").text(this.playerTwo.gamesWon);
+            $(".step-number").text(this.steps);
         }
         this.registerHandlers(this.board);
     }
@@ -78,6 +92,8 @@ export class GameBoard {
                 this.currentPlayer = this.playerOne;
             }
             this.checkWinner();
+            this.steps++;
+            $(".step-number").text(this.steps);
             this.saveState();
         }
     }
@@ -106,6 +122,20 @@ export class GameBoard {
             }
         }
     }
+    won(player: Player) {
+        alert("Player " + player.id + " won! Congrats, " + player.name + "!");
+        player.gamesWon++;
+        var continueButton = $(".continue-game");
+        var restartButton = $(".restart-current-game");
+        restartButton.attr("disabled", "disabled");
+        continueButton.removeAttr("disabled").click(() => {
+            continueButton.attr("disabled", "disabled");
+            this.winner = undefined;
+            restartButton.removeAttr("disabled");
+            this.onRestartButtonClicked();
+        });
+        this.winner = player;
+    }
     registerHandlers(board: Tile[][]) {
         for (let i = 0; i < board.length; i++) {
             for (let j = 0; j < board[i].length; j++) {
@@ -117,31 +147,63 @@ export class GameBoard {
         restartButton.click(() => this.onRestartButtonClicked());
         var clearButton = $(".clear-results");
         clearButton.click(() => this.onClearButtonClicked());
-    }
-    won(player: Player) {
-        alert("Player " + player.id + " won! Congrats, " + player.name + "!");
-        player.gamesWon++;
-        var continueButton = $(".continue-game");
-        continueButton.removeAttr("disabled").click(() => {
-            continueButton.attr("disabled", "disabled");
-            this.winner = undefined;
-            this.startGame();
-        });
-        this.winner = player;
-    }
+        var playerOneField = $(".player-one-name");
+        playerOneField.dblclick(() => this.onPlayerDoubleClicked(this.playerOne));
+        var playerTwoField = $(".player-two-name");
+        playerTwoField.dblclick(() => this.onPlayerDoubleClicked(this.playerTwo));
+    }    
     onRestartButtonClicked() {
         this.initializeBoard(this.tableElement, this.board = []);
         this.currentPlayer =
             this.winner === this.playerOne ? this.playerTwo : this.playerOne;
+        this.winner = undefined;
+        this.steps = 0;
         this.registerHandlers(this.board);
         this.saveState();
+        this.startGame();
     }
     onClearButtonClicked() {
         this.initializeBoard(this.tableElement, this.board = []);
         this.playerOne.gamesWon = 0;
         this.playerTwo.gamesWon = 0;
         this.currentPlayer = this.playerOne;
+        this.winner = undefined;
+        this.steps = 0;
         this.registerHandlers(this.board);
         this.saveState();
+        this.startGame();
+    }
+    onPlayerDoubleClicked(player: Player) {
+        player.name = "Sikerült";
+        if(player === this.playerOne) {
+            var playerOneInfo = $(".player-one-info");
+            playerOneInfo.children("player-one-name").remove();
+            playerOneInfo.add("form").addClass("player-one-form");
+            var playerOneForm = $(".player-one-form");
+            playerOneForm.add("input[type='text']").addClass("player-one-input");
+            var playerOneInput = $(".player-one-input");
+            playerOneForm.add("input[type='submit']")
+            var playerOneSubmit = $(".player-one-input");
+            playerOneSubmit.click(() => this.onSubmitClick(player));
+            
+            //var playerOneField = $(".player-one-name");
+            //playerOneField.text(player.name);
+        }
+        else if(player === this.playerTwo) {
+            var playerTwoField = $(".player-two-name");
+            playerTwoField.text(player.name);
+        }
+        this.saveState();
+    }
+    onSubmitClick(player: Player) {
+        if(player === this.playerOne) {
+            var playerOneInfo = $(".player-one-info");
+            var playerName = $(".player-one-input").text();
+            playerOneInfo.children("player-one-form").remove();
+            player.name = playerName;
+            playerOneInfo.add("b").addClass("player-name").addClass("player-one-name").text(playerName);
+            this.saveState();
+            this.registerHandlers(this.board);
+        }
     }
 }

@@ -6,6 +6,7 @@ export interface SaveData {
     x: number;
     y: number;
     tileStates: TileState[][];
+    steps: number;
 }
 export interface PlayerInfo {
     name: string;
