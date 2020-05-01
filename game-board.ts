@@ -54,6 +54,7 @@ export class GameBoard {
         localStorage.setItem("amoeba-table", JSON.stringify(<SaveData>{
             playerOne: this.playerOne,
             playerTwo: this.playerTwo,
+            current: (this.currentPlayer === this.playerOne) ? 'player-one' : 'player-two',
             x: this.x,
             y: this.y,
             tileStates: this.board.map(row => row.map(tile => tile.state))
@@ -112,6 +113,10 @@ export class GameBoard {
                 tile.element.click(() => this.onTileClicked(tile));
             }
         }
+        var restartButton = $(".restart-current-game");
+        restartButton.click(() => this.onRestartButtonClicked());
+        var clearButton = $(".clear-results");
+        clearButton.click(() => this.onClearButtonClicked());
     }
     won(player: Player) {
         alert("Player " + player.id + " won! Congrats, " + player.name + "!");
@@ -123,5 +128,20 @@ export class GameBoard {
             this.startGame();
         });
         this.winner = player;
+    }
+    onRestartButtonClicked() {
+        this.initializeBoard(this.tableElement, this.board = []);
+        this.currentPlayer =
+            this.winner === this.playerOne ? this.playerTwo : this.playerOne;
+        this.registerHandlers(this.board);
+        this.saveState();
+    }
+    onClearButtonClicked() {
+        this.initializeBoard(this.tableElement, this.board = []);
+        this.playerOne.gamesWon = 0;
+        this.playerTwo.gamesWon = 0;
+        this.currentPlayer = this.playerOne;
+        this.registerHandlers(this.board);
+        this.saveState();
     }
 }
