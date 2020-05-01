@@ -2,7 +2,7 @@
   "name": "typescript_labor-kliens_oldali_technologiak",
   "version": "0.0.0",
   "dependencies": {
-    "bootstrap": "3.3.7",
+    "bootstrap": "3.4.1",
     "jquery": "3.2.1",
     "systemjs": "0.19.47"
   },
