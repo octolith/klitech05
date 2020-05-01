@@ -174,36 +174,31 @@ export class GameBoard {
         this.startGame();
     }
     onPlayerDoubleClicked(player: Player) {
-        player.name = "Sikerült";
         if(player === this.playerOne) {
-            var playerOneInfo = $(".player-one-info");
-            playerOneInfo.children("player-one-name").remove();
-            playerOneInfo.add("form").addClass("player-one-form");
-            var playerOneForm = $(".player-one-form");
-            playerOneForm.add("input[type='text']").addClass("player-one-input");
-            var playerOneInput = $(".player-one-input");
-            playerOneForm.add("input[type='submit']")
-            var playerOneSubmit = $(".player-one-input");
-            playerOneSubmit.click(() => this.onSubmitClick(player));
-            
-            //var playerOneField = $(".player-one-name");
-            //playerOneField.text(player.name);
+            var playerOneName = $(".player-one-name");
+            var content = "<input type='text' class='form-control player-one-name-input' value='"+player.name+"' />" +
+                          "<button type='button' class='player-one-name-button btn btn-success'>OK</button>";
+            playerOneName.html(content);
+            var playerOneNameButton = $(".player-one-name-button");
+            playerOneNameButton.click(() => {
+                player.name = $(".player-one-name-input").val().toString();
+                var newContent = "<b class='player-name player-one-name'>"+player.name+"</b>";
+                playerOneName.html(newContent);
+            });
         }
         else if(player === this.playerTwo) {
-            var playerTwoField = $(".player-two-name");
-            playerTwoField.text(player.name);
+            var playerTwoName = $(".player-two-name");
+            var content = "<input type='text' class='form-control player-two-name-input' value='"+player.name+"' />" +
+                          "<button type='button' class='player-two-name-button btn btn-success'>OK</button>";
+            playerTwoName.html(content);
+            var playerTwoNameButton = $(".player-two-name-button");
+            playerTwoNameButton.click(() => {
+                player.name = $(".player-two-name-input").val().toString();
+                var newContent = "<b class='player-name player-two-name'>"+player.name+"</b>";
+                playerTwoName.html(newContent);
+            });
         }
+        this.registerHandlers(this.board);
         this.saveState();
-    }
-    onSubmitClick(player: Player) {
-        if(player === this.playerOne) {
-            var playerOneInfo = $(".player-one-info");
-            var playerName = $(".player-one-input").text();
-            playerOneInfo.children("player-one-form").remove();
-            player.name = playerName;
-            playerOneInfo.add("b").addClass("player-name").addClass("player-one-name").text(playerName);
-            this.saveState();
-            this.registerHandlers(this.board);
-        }
     }
 }
