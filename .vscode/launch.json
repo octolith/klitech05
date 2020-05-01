@@ -1,0 +1,27 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch localhost with sourcemaps",
+            "type": "edge",
+            "request": "launch",
+            "url": "http://localhost:4321",
+            "webRoot": "${workspaceRoot}",
+            "sourceMaps": true
+        } //,
+        // {
+        //     "type": "chrome",
+        //     "request": "launch",
+        //     "name": "Launch Chrome against localhost",
+        //     "url": "http://localhost:4321",
+        //     "webRoot": "${workspaceRoot}"
+        // },
+        // {
+        //     "type": "chrome",
+        //     "request": "attach",
+        //     "name": "Attach to Chrome",
+        //     "port": 9222,
+        //     "webRoot": "${workspaceRoot}"
+        // }
+    ]
+}

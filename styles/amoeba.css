@@ -1,0 +1,56 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+.game-board {
+     height: 80%;
+}
+
+.game-board-table {
+    max-width: 100%;
+    margin: 30px auto;
+    text-align: center;
+}
+
+.game-board-table td {
+    height: 60px;
+    width: 60px;
+    border: 1px dotted blue;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+.game-board-table td.mark {
+    cursor: not-allowed;
+}
+
+.game-board-table td.mark-o {
+    background: lightseagreen;
+    color: darkseagreen;
+}
+
+.game-board-table td.mark-x {
+    background: lightgoldenrodyellow;
+    color: darkgoldenrod;
+}
+
+.game-board-table td:hover:not(.mark) {
+    background: lightblue;
+}
+
+.game-overview {
+    height: 20%;
+    text-align: center;
+}
+
+.player-info {
+    text-align: center;
+    height: 100%;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.player-info.current-player {
+    background: lightgreen;
+}

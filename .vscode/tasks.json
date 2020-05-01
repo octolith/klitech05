@@ -1,0 +1,41 @@
+{
+    "version": "0.1.0",
+    "tasks": [
+        {
+            "taskName": "tsc watch",
+            "command": ".\\node_modules\\.bin\\tsc",
+            "args": [
+                "-w",
+                "-p",
+                "."
+            ],
+            "showOutput": "silent",
+            "isBuildCommand": true,
+            "isShellCommand": true,
+            "isBackground": true,
+            "problemMatcher": "$tsc-watch"
+        },
+        {
+            "taskName": "npm restore",
+            "command": "npm",
+            "args": [
+                "install"
+            ],
+            "showOutput": "always",
+            "isBuildCommand": false,
+            "isShellCommand": true
+        },
+        {
+            "taskName": "tsc build",
+            "command": ".\\node_modules\\.bin\\tsc",
+            "args": [
+                "-p",
+                "."
+            ],
+            "isShellCommand": true,
+            "isBuildCommand": false,
+            "showOutput": "always",
+            "problemMatcher": "$tsc"
+        }
+    ]
+}
